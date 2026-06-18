@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SRG League Rules &amp; Acknowledgment</title>
+  <title>SRG League — Rules & Acknowledgment</title>
   <style>
-    /* ── Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -18,6 +17,7 @@
       --border:   #2a2a34;
       --text:     #e8e8f0;
       --muted:    #888898;
+      --green:    #22c55e;
     }
 
     html { scroll-behavior: smooth; }
@@ -31,138 +31,183 @@
       min-height: 100vh;
     }
 
-    /* ── Checkered header strip ── */
+    /* ── Checkered strip ── */
     .check-strip {
-      height: 8px;
-      background-image: repeating-linear-gradient(
-        90deg,
-        #fff 0px, #fff 12px,
-        #000 12px, #000 24px
-      );
-      opacity: 0.12;
+      height: 6px;
+      background-image: repeating-linear-gradient(90deg,#fff 0,#fff 12px,#000 12px,#000 24px);
+      opacity: 0.1;
     }
 
-    /* ── Hero header ── */
+    /* ── Header ── */
     header {
-      background: linear-gradient(160deg, #161620 0%, #0c0c0e 60%);
+      background: linear-gradient(160deg,#161620 0%,#0c0c0e 60%);
       border-bottom: 1px solid var(--border);
-      padding: 48px 24px 36px;
+      padding: 36px 24px 28px;
       text-align: center;
       position: relative;
       overflow: hidden;
     }
-
     header::before {
       content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(224,32,32,0.12) 0%, transparent 70%);
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 0%,rgba(224,32,32,.12) 0%,transparent 70%);
       pointer-events: none;
     }
-
     .league-badge {
       display: inline-block;
       background: var(--red);
       color: #fff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 2.5px;
       text-transform: uppercase;
-      padding: 4px 14px;
+      padding: 3px 12px;
       border-radius: 2px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
-
     header h1 {
-      font-size: clamp(28px, 5vw, 48px);
+      font-size: clamp(22px,4vw,36px);
       font-weight: 800;
-      letter-spacing: -0.5px;
-      line-height: 1.1;
       color: #fff;
+      line-height: 1.1;
     }
-
     header h1 span { color: var(--red); }
-
     header p.subtitle {
-      margin-top: 12px;
+      margin-top: 8px;
       color: var(--muted);
-      font-size: 14px;
-      max-width: 520px;
+      font-size: 13px;
+      max-width: 480px;
       margin-left: auto;
       margin-right: auto;
     }
+
+    /* ── Step progress bar ── */
+    .step-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+      padding: 20px 24px 0;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+      transition: background 0.3s;
+    }
+    .step-item.done:not(:last-child)::after { background: var(--red); }
+
+    .step-circle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .step-item.active .step-circle {
+      border-color: var(--red);
+      background: var(--red);
+      color: #fff;
+    }
+    .step-item.done .step-circle {
+      border-color: var(--red);
+      background: var(--red);
+      color: #fff;
+    }
+
+    .step-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .step-item.active .step-label { color: var(--text); }
+    .step-item.done  .step-label  { color: var(--red); }
 
     /* ── Layout ── */
     .wrapper {
       max-width: 820px;
       margin: 0 auto;
-      padding: 0 20px 80px;
+      padding: 24px 20px 80px;
     }
 
-    /* ── Read progress bar ── */
-    #progress-bar {
-      position: fixed;
-      top: 0; left: 0;
-      height: 3px;
-      width: 0%;
-      background: var(--red);
-      z-index: 999;
-      transition: width 0.15s;
-    }
+    /* ── Pages ── */
+    .page { display: none; }
+    .page.active { display: block; }
 
     /* ── Section cards ── */
     .rules-section {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      margin-top: 28px;
+      margin-top: 20px;
       overflow: hidden;
     }
-
     .rules-section-header {
       background: var(--surface2);
       border-bottom: 1px solid var(--border);
-      padding: 14px 22px;
+      padding: 13px 20px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
-
     .section-number {
       background: var(--red);
       color: #fff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      width: 26px; height: 26px;
+      width: 24px; height: 24px;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-
     .rules-section-header h2 {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       color: #fff;
     }
-
-    .rules-body { padding: 20px 22px; }
+    .rules-body { padding: 18px 20px; }
 
     /* ── Sub-sections ── */
-    .sub-section {
-      margin-bottom: 20px;
-    }
+    .sub-section { margin-bottom: 18px; }
     .sub-section:last-child { margin-bottom: 0; }
-
     .sub-section h3 {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 10px;
-      padding-bottom: 6px;
+      margin-bottom: 8px;
+      padding-bottom: 5px;
       border-bottom: 1px solid var(--border);
     }
 
@@ -170,27 +215,259 @@
     .rule-item {
       display: flex;
       gap: 12px;
-      padding: 7px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,.04);
     }
     .rule-item:last-child { border-bottom: none; }
-
     .rule-num {
       color: var(--red);
       font-weight: 700;
-      font-size: 13px;
-      min-width: 36px;
+      font-size: 12px;
+      min-width: 34px;
       flex-shrink: 0;
       padding-top: 1px;
     }
+    .rule-text { color: #c8c8d8; font-size: 13.5px; }
 
-    .rule-text { color: #c8c8d8; font-size: 14px; }
+    /* ── Bullet list inside rules ── */
+    .rule-bullets {
+      list-style: none;
+      margin: 6px 0 4px 0;
+      padding: 0;
+    }
+    .rule-bullets li {
+      color: #c8c8d8;
+      font-size: 13.5px;
+      padding: 3px 0 3px 16px;
+      position: relative;
+    }
+    .rule-bullets li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--red);
+    }
 
-    /* ── Divider ── */
-    .section-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 8px 0;
+    /* ── Penalty point table ── */
+    .penalty-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .penalty-table th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .penalty-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      color: #c8c8d8;
+      vertical-align: top;
+    }
+    .penalty-table tr:last-child td { border-bottom: none; }
+    .penalty-table .pts {
+      color: var(--red);
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    /* ── Consequence grids ── */
+    .consequence-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media (max-width: 520px) { .consequence-grid { grid-template-columns: 1fr; } }
+
+    .consequence-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .consequence-card h4 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .consequence-row {
+      display: flex;
+      gap: 10px;
+      padding: 5px 0;
+      font-size: 12.5px;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .consequence-row:last-child { border-bottom: none; }
+    .consequence-pts {
+      color: var(--red);
+      font-weight: 700;
+      min-width: 28px;
+      flex-shrink: 0;
+    }
+    .consequence-text { color: #c8c8d8; }
+
+    /* ── Section divider ── */
+    .section-divider { height: 1px; background: var(--border); margin: 10px 0; }
+
+    /* ── Welcome page ── */
+    .welcome-hero {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px 28px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .welcome-hero .flag { margin-bottom: 16px; }
+    .welcome-hero .flag img { max-width: 220px; width: 100%; height: auto; border-radius: 6px; }
+    .welcome-hero h2 { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .welcome-hero p { color: #c8c8d8; font-size: 14px; line-height: 1.7; max-width: 560px; margin: 0 auto 12px; }
+
+    .welcome-cards {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    @media (max-width: 520px) { .welcome-cards { grid-template-columns: 1fr; } }
+
+    .welcome-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      text-align: center;
+    }
+    .welcome-card .icon { font-size: 24px; margin-bottom: 8px; }
+    .welcome-card h3 { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .welcome-card p  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    /* ── League info cards ── */
+    .league-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 16px;
+      overflow: hidden;
+    }
+    .league-card-header {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 13px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .league-tag {
+      background: var(--red);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .league-tag.rookie { background: #2563eb; }
+    .league-tag.f4     { background: #16a34a; }
+    .league-tag.f3     { background: var(--red); }
+    .league-tag.f2     { background: #7c3aed; }
+    .league-card-header h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .league-card-body { padding: 18px 20px; }
+
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .schedule-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 8px 12px;
+    }
+    .schedule-item .s-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+    .schedule-item .s-value {
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .league-desc {
+      font-size: 13px;
+      color: #c8c8d8;
+      line-height: 1.7;
+      margin-top: 10px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .league-desc p { margin-bottom: 8px; }
+    .league-desc p:last-child { margin-bottom: 0; }
+
+    /* ── Navigation buttons ── */
+    .page-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 11px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.5px;
+    }
+    .btn-nav:hover { background: var(--border); transform: translateY(-1px); }
+    .btn-nav:active { transform: translateY(0); }
+    .btn-nav.primary {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+      margin-left: auto;
+    }
+    .btn-nav.primary:hover { background: #c01818; }
+    .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+    .page-counter {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
     }
 
     /* ── Acknowledgment card ── */
@@ -198,418 +475,622 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      margin-top: 40px;
+      margin-top: 20px;
       overflow: hidden;
     }
-
     .ack-header {
-      background: linear-gradient(90deg, var(--red-dark), #1e1e28);
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      background: linear-gradient(90deg,var(--red-dark),#1e1e28);
+      padding: 14px 22px;
     }
-
     .ack-header h2 {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.5px;
       text-transform: uppercase;
       color: #fff;
     }
+    .ack-body { padding: 24px 22px; }
+    .ack-notice {
+      background: rgba(224,32,32,.08);
+      border: 1px solid rgba(224,32,32,.2);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #c8c8d8;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
 
-    .ack-body { padding: 28px 24px; }
-
-    /* ── Pre-filled driver card ── */
+    /* ── Driver card ── */
     #driver-card {
-      display: none;
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 14px 18px;
-      margin-bottom: 20px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
       display: none;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
     #driver-card.visible { display: flex; }
-
     .driver-avatar {
-      width: 40px; height: 40px;
+      width: 38px; height: 38px;
       background: var(--red);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
-      font-weight: 800;
-      color: #fff;
+      font-size: 15px; font-weight: 800; color: #fff;
       flex-shrink: 0;
     }
-
     .driver-card-info { flex: 1; }
-    .driver-card-name { font-weight: 700; font-size: 15px; color: #fff; }
-    .driver-card-email { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
+    .driver-card-name  { font-weight: 700; font-size: 14px; color: #fff; }
+    .driver-card-email { font-size: 11px; color: var(--muted); margin-top: 1px; }
     .driver-card-badge {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      background: rgba(240,180,41,0.12);
-      color: var(--gold);
-      border: 1px solid rgba(240,180,41,0.25);
-      border-radius: 4px;
-      padding: 3px 8px;
-      white-space: nowrap;
-    }
-
-    .ack-notice {
-      background: rgba(224,32,32,0.08);
-      border: 1px solid rgba(224,32,32,0.2);
-      border-radius: 6px;
-      padding: 14px 18px;
-      font-size: 13px;
-      color: #c8c8d8;
-      margin-bottom: 24px;
-      line-height: 1.6;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+      background: rgba(240,180,41,.1); color: var(--gold);
+      border: 1px solid rgba(240,180,41,.25);
+      border-radius: 4px; padding: 2px 7px; white-space: nowrap;
     }
 
     /* ── Form fields ── */
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
+      gap: 14px;
+      margin-bottom: 14px;
     }
-
-    @media (max-width: 520px) {
-      .form-row { grid-template-columns: 1fr; }
-    }
-
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-
+    @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
     label.field-label {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--muted);
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted);
     }
-
-    input[type="text"],
-    input[type="email"] {
+    input[type="text"], input[type="email"] {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 10px 14px;
+      padding: 9px 13px;
       color: var(--text);
-      font-size: 14px;
+      font-size: 13.5px;
       transition: border-color 0.2s;
       width: 100%;
     }
-
-    input[type="text"]:focus,
-    input[type="email"]:focus {
-      outline: none;
-      border-color: var(--red);
-      box-shadow: 0 0 0 3px rgba(224,32,32,0.12);
-    }
-
-    input::placeholder { color: #555560; }
+    input:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(224,32,32,.1); }
+    input::placeholder { color: #444450; }
 
     /* ── Checkbox ── */
     .checkbox-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin: 20px 0 24px;
-      cursor: pointer;
+      display: flex; align-items: flex-start; gap: 11px;
+      margin: 18px 0 20px; cursor: pointer;
     }
-
     .checkbox-row input[type="checkbox"] {
       appearance: none;
-      width: 20px; height: 20px;
+      width: 19px; height: 19px;
       border: 2px solid var(--border);
       border-radius: 4px;
       background: var(--bg);
-      flex-shrink: 0;
-      margin-top: 1px;
-      cursor: pointer;
+      flex-shrink: 0; margin-top: 1px; cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
       position: relative;
     }
-
-    .checkbox-row input[type="checkbox"]:checked {
-      background: var(--red);
-      border-color: var(--red);
-    }
-
+    .checkbox-row input[type="checkbox"]:checked { background: var(--red); border-color: var(--red); }
     .checkbox-row input[type="checkbox"]:checked::after {
       content: '';
       position: absolute;
       left: 4px; top: 1px;
-      width: 6px; height: 10px;
-      border: 2px solid #fff;
-      border-top: none;
-      border-left: none;
+      width: 5px; height: 9px;
+      border: 2px solid #fff; border-top: none; border-left: none;
       transform: rotate(40deg);
     }
-
-    .checkbox-label {
-      font-size: 14px;
-      color: #c8c8d8;
-      line-height: 1.5;
-      user-select: none;
-    }
+    .checkbox-label { font-size: 13.5px; color: #c8c8d8; line-height: 1.5; user-select: none; }
 
     /* ── Submit button ── */
     .submit-btn {
-      background: var(--red);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 13px 32px;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      background: var(--red); color: #fff;
+      border: none; border-radius: 6px;
+      padding: 12px 28px;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
       cursor: pointer;
-      transition: background 0.2s, opacity 0.2s, transform 0.1s;
+      transition: background 0.2s, transform 0.1s;
       width: 100%;
     }
+    .submit-btn:hover:not(:disabled) { background: #c01818; transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-    .submit-btn:hover:not(:disabled) {
-      background: #c01818;
-      transform: translateY(-1px);
-    }
+    /* ── Success ── */
+    #success-message { display: none; text-align: center; padding: 32px 20px; }
+    .success-icon { font-size: 44px; margin-bottom: 10px; }
+    #success-message h3 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    #success-message p  { color: var(--muted); font-size: 13px; }
 
-    .submit-btn:active:not(:disabled) { transform: translateY(0); }
-
-    .submit-btn:disabled {
-      opacity: 0.35;
-      cursor: not-allowed;
-    }
-
-    /* ── Success state ── */
-    #success-message {
-      display: none;
-      text-align: center;
-      padding: 32px 24px;
-    }
-
-    .success-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-    }
-
-    #success-message h3 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-
-    #success-message p {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    /* ── Error message ── */
     #form-error {
       display: none;
-      background: rgba(224,32,32,0.1);
-      border: 1px solid rgba(224,32,32,0.3);
+      background: rgba(224,32,32,.1);
+      border: 1px solid rgba(224,32,32,.3);
       border-radius: 6px;
       color: #ff7070;
       font-size: 13px;
-      padding: 10px 14px;
-      margin-top: 12px;
+      padding: 9px 13px;
+      margin-top: 10px;
     }
 
     /* ── Footer ── */
     footer {
       text-align: center;
-      padding: 24px;
+      padding: 20px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
       border-top: 1px solid var(--border);
     }
-
-    /* ── Scroll-lock warning ── */
-    #scroll-warning {
-      position: sticky;
-      bottom: 16px;
-      margin: 16px 0 0;
-      background: var(--surface2);
-      border: 1px solid var(--gold);
-      border-radius: 6px;
-      padding: 10px 16px;
-      font-size: 13px;
-      color: var(--gold);
-      text-align: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-    #scroll-warning.visible { opacity: 1; }
   </style>
 </head>
 <body>
 
-<div id="progress-bar"></div>
 <div class="check-strip"></div>
 
 <header>
   <div class="league-badge">Official League Document</div>
-  <h1><span>SRG</span> League Rules</h1>
-  <p class="subtitle">Read all sections carefully before acknowledging. Your submission is logged with your name, email, and timestamp.</p>
+  <h1><span>SRG</span> League Rules &amp; Procedures</h1>
+  <p class="subtitle" id="header-subtitle">Read each section carefully before acknowledging.</p>
 </header>
+
+<!-- Step progress -->
+<div class="step-nav" id="step-nav">
+  <div class="step-item active" data-step="0">
+    <div class="step-circle">1</div>
+    <div class="step-label">Welcome</div>
+  </div>
+  <div class="step-item" data-step="1">
+    <div class="step-circle">2</div>
+    <div class="step-label">Leagues</div>
+  </div>
+  <div class="step-item" data-step="2">
+    <div class="step-circle">3</div>
+    <div class="step-label">Officiating</div>
+  </div>
+  <div class="step-item" data-step="3">
+    <div class="step-circle">4</div>
+    <div class="step-label">Rules</div>
+  </div>
+  <div class="step-item" data-step="4">
+    <div class="step-circle">5</div>
+    <div class="step-label">Acknowledge</div>
+  </div>
+</div>
 
 <div class="wrapper">
 
-  <!-- ═══════════════════════════════════════════════════
-       SECTION 1 — GENERAL CONDUCT
-  ═══════════════════════════════════════════════════ -->
-  <div class="rules-section">
-    <div class="rules-section-header">
-      <div class="section-number">1</div>
-      <h2>🏁 SRG On-Track Conduct</h2>
-    </div>
-    <div class="rules-body">
-
-      <p style="color:var(--muted);font-size:13px;margin-bottom:18px;">
-        These guidelines promote clean, respectful racing while preserving the competitive and fun nature of league racing.
-        Not every incident will result in a penalty, but all drivers are expected to race with awareness and consideration for others.
+  <!-- ══════════════════════════════════════════
+       PAGE 1 — WELCOME
+  ══════════════════════════════════════════ -->
+  <div class="page active" id="page-0">
+    <div class="welcome-hero">
+      <div class="flag"><img src="srg-logo.png" alt="Sim Racers Group" /></div>
+      <h2>Welcome to Sim Racers Group</h2>
+      <p>
+        SRG is a sim racing league built around hard, clean, and respectful competition.
+        Whether you're in Rookie, F4, or F3, the goal is the same — race hard, race smart,
+        and make it fun for everyone on the grid.
       </p>
+      <p>
+        Before you can take part in any SRG race, you need to read and acknowledge our
+        league rules and officiating procedures. This takes just a few minutes and ensures
+        every driver is on the same page.
+      </p>
+    </div>
 
-      <div class="sub-section">
-        <h3>1 · General Conduct</h3>
+    <div class="welcome-cards">
+      <div class="welcome-card">
+        <div class="icon">⚖️</div>
+        <h3>Officiating</h3>
+        <p>How incidents are reviewed, penalty points, and season consequences.</p>
+      </div>
+      <div class="welcome-card">
+        <div class="icon">📋</div>
+        <h3>Rules</h3>
+        <p>Passing, defending, rejoining, and track limits guidelines.</p>
+      </div>
+      <div class="welcome-card">
+        <div class="icon">✅</div>
+        <h3>Acknowledgment</h3>
+        <p>Confirm you've read and agree to race by the rules.</p>
+      </div>
+    </div>
+
+    <div class="page-nav">
+      <span class="page-counter">Step 1 of 5</span>
+      <button class="btn-nav primary" onclick="goTo(1)">Next: League Info →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE 2 — LEAGUE INFO
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-1">
+
+    <!-- Rookie -->
+    <div class="league-card">
+      <div class="league-card-header">
+        <span class="league-tag rookie">Rookie</span>
+        <h2>Ray FF1600 — Tuesday Nights</h2>
+      </div>
+      <div class="league-card-body">
+        <div class="schedule-grid">
+          <div class="schedule-item"><div class="s-label">Practice</div><div class="s-value">8:00 PM PT (60 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Qualifying</div><div class="s-value">9:00 PM PT (15 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Sprint Race</div><div class="s-value">9:15 PM PT (20 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Setup</div><div class="s-value">Fixed</div></div>
+          <div class="schedule-item"><div class="s-label">Damage</div><div class="s-value">Off</div></div>
+          <div class="schedule-item"><div class="s-label">Points</div><div class="s-value">Off</div></div>
+          <div class="schedule-item"><div class="s-label">Inc. Limit</div><div class="s-value">None</div></div>
+          <div class="schedule-item"><div class="s-label">Weather</div><div class="s-value">Ideal / Daytime only</div></div>
+        </div>
+        <div class="league-desc">
+          <p><strong style="color:#fff;">Target:</strong> Primarily for those brand new to sim racing, but open to anyone who wants light-hearted fun on a Tuesday night.</p>
+          <p><strong style="color:#fff;">Purpose:</strong> Learn car control from a purely mechanical platform — no aero, no complexity, just driving.</p>
+          <p><strong style="color:#fff;">Officiating:</strong> Rookie does not use the season penalty point system. The focus is coaching and development. See the Officiating page for full details.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intermediate F4 -->
+    <div class="league-card">
+      <div class="league-card-header">
+        <span class="league-tag f4">Intermediate</span>
+        <h2>F4 Americas Championship — Tuesday Nights</h2>
+      </div>
+      <div class="league-card-body">
+        <div class="schedule-grid">
+          <div class="schedule-item"><div class="s-label">Practice</div><div class="s-value">6:00 PM PT (80 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Qualifying</div><div class="s-value">7:20 PM PT (15 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Sprint Race</div><div class="s-value">7:35 PM PT (20 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Broadcast</div><div class="s-value">▶️ Live on YouTube</div></div>
+          <div class="schedule-item"><div class="s-label">Setup</div><div class="s-value">Fixed</div></div>
+          <div class="schedule-item"><div class="s-label">Damage</div><div class="s-value">Off</div></div>
+          <div class="schedule-item"><div class="s-label">Points</div><div class="s-value">On (1st–15th)</div></div>
+          <div class="schedule-item"><div class="s-label">Inc. Limit</div><div class="s-value">DQ at 20x</div></div>
+          <div class="schedule-item"><div class="s-label">Weather</div><div class="s-value">Randomized</div></div>
+          <div class="schedule-item"><div class="s-label">Drop Weeks</div><div class="s-value">2 (best 10 of 12)</div></div>
+        </div>
+        <div class="league-desc">
+          <p><strong style="color:#fff;">Target:</strong> Exclusively for recent Rookie FF graduates and those (generally sub-2.0k iR) working to build skills in pace and control.</p>
+          <p><strong style="color:#fff;">Purpose:</strong> Learn car control with aero now a factor. Build skills in race craft, situational awareness, and race management.</p>
+          <p><strong style="color:#fff;">League Philosophy:</strong> The Intermediate F4 league is the most important league in the ladder. It is protected as a place for those learning race craft to develop with a reasonable expectation of success before graduating to faster cars. Drivers who consistently dominate will be promoted to F3 — no one hangs out in the "JV" with a "varsity" skill set.</p>
+          <p><strong style="color:#fff;">Officiating:</strong> F4 uses the SRG penalty point system. Points accumulate over the season and carry consequences at key thresholds. See the Officiating page for full details.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advanced F3 -->
+    <div class="league-card">
+      <div class="league-card-header">
+        <span class="league-tag f3">Advanced</span>
+        <h2>F3 League &amp; Team Championship — Wednesday Nights</h2>
+      </div>
+      <div class="league-card-body">
+        <div class="schedule-grid">
+          <div class="schedule-item"><div class="s-label">Practice</div><div class="s-value">6:00 PM PT (45 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Qualifying</div><div class="s-value">6:45 PM PT (20 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Sprint Race</div><div class="s-value">7:05 PM PT (15 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Feature Race</div><div class="s-value">7:20 PM PT (25 min)</div></div>
+          <div class="schedule-item"><div class="s-label">Feature Grid</div><div class="s-value">Top 6 from sprint reversed</div></div>
+          <div class="schedule-item"><div class="s-label">Broadcast</div><div class="s-value">▶️ Live on YouTube</div></div>
+          <div class="schedule-item"><div class="s-label">Setup</div><div class="s-value">Fixed</div></div>
+          <div class="schedule-item"><div class="s-label">Damage</div><div class="s-value">On · Fast Repair: 1</div></div>
+          <div class="schedule-item"><div class="s-label">Points</div><div class="s-value">On (1st–15th)</div></div>
+          <div class="schedule-item"><div class="s-label">Inc. Limit</div><div class="s-value">Drive-thru at 17x · DQ at 25x</div></div>
+          <div class="schedule-item"><div class="s-label">Drop Weeks</div><div class="s-value">2 (best 10 of 12)</div></div>
+          <div class="schedule-item"><div class="s-label">Championship</div><div class="s-value">Individual + Teams</div></div>
+        </div>
+        <div class="league-desc">
+          <p><strong style="color:#fff;">Target:</strong> Graduates of Intermediate F4 (2.0k+ iR) and those seeking increasingly high levels of skill and mutual respect on track.</p>
+          <p><strong style="color:#fff;">Purpose:</strong> A place where developed skills in race craft, situational awareness, race management, and pace can be applied and enjoyed by everyone.</p>
+          <p><strong style="color:#fff;">Officiating:</strong> F3 uses the SRG penalty point system with its own consequence thresholds. At this level, any collision warrants a conversation. Damage is on — contact has real consequences on track and off. See the Officiating page for full details.</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="page-nav">
+      <button class="btn-nav" onclick="goTo(0)">← Back</button>
+      <span class="page-counter">Step 2 of 5</span>
+      <button class="btn-nav primary" onclick="goTo(2)">Next: Officiating →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE 3 — OFFICIATING
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-2">
+
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">1</div>
+        <h2>General Philosophy</h2>
+      </div>
+      <div class="rules-body">
+        <p style="color:var(--muted);font-size:13px;margin-bottom:14px;line-height:1.6;">
+          SRG leagues are built around hard, respectful racing. The goal of officiating is to protect clean racing, encourage improvement, and address behavior that repeatedly harms other members' races.
+        </p>
+        <div class="rule-item"><span class="rule-num">1.1</span><span class="rule-text">SRG wants racers to race.</span></div>
+        <div class="rule-item"><span class="rule-num">1.2</span><span class="rule-text">Not every incident will result in a penalty. Some incidents will be considered just racing.</span></div>
+        <div class="rule-item"><span class="rule-num">1.3</span><span class="rule-text">Officials will look first at whether an incident was egregious, whether a review was requested, and whether a driver is showing a repeated pattern of avoidable incidents.</span></div>
+        <div class="rule-item"><span class="rule-num">1.4</span><span class="rule-text">The focus of officiating is not punishment for every mistake. The focus is maintaining a fun, respectful, and reasonably clean racing environment.</span></div>
+        <div class="rule-item"><span class="rule-num">1.5</span><span class="rule-text">Drivers are expected to know the league's on-track conduct guidelines and make reasonable, respectful decisions when racing others.</span></div>
+      </div>
+    </div>
+
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">2</div>
+        <h2>Review Process</h2>
+      </div>
+      <div class="rules-body">
+        <div class="rule-item"><span class="rule-num">2.1</span><span class="rule-text">Officials may review all races in replay after the event.</span></div>
+        <div class="rule-item"><span class="rule-num">2.2</span><span class="rule-text">Not every contact or mistake will result in action. Small or isolated incidents may be recorded as just racing.</span></div>
+        <div class="rule-item" style="flex-direction:column;gap:6px;">
+          <div style="display:flex;gap:12px;">
+            <span class="rule-num">2.3</span>
+            <span class="rule-text">A review is more likely to result in action if:</span>
+          </div>
+          <ul class="rule-bullets" style="margin-left:46px;">
+            <li>the incident is egregious</li>
+            <li>a driver requests review</li>
+            <li>the incident causes significant harm</li>
+            <li>a driver shows a repeated pattern of similar conduct</li>
+          </ul>
+        </div>
+        <div class="rule-item" style="flex-direction:column;gap:6px;">
+          <div style="display:flex;gap:12px;">
+            <span class="rule-num">2.4</span>
+            <span class="rule-text">In reviewing an incident, officials may consider:</span>
+          </div>
+          <ul class="rule-bullets" style="margin-left:46px;">
+            <li>what happened</li>
+            <li>what each driver saw or could reasonably be expected to see</li>
+            <li>the point in the sequence where the incident first became avoidable</li>
+            <li>whether there were unusual circumstances such as weather, visibility, or rejoining</li>
+            <li>the severity of the outcome</li>
+            <li>whether this was an isolated mistake or part of a larger pattern</li>
+            <li>whether prior coaching or penalties are already in play</li>
+          </ul>
+        </div>
+        <div class="rule-item"><span class="rule-num">2.5</span><span class="rule-text">If asked for an account of an incident, drivers should respond promptly and concisely.</span></div>
+      </div>
+    </div>
+
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">3</div>
+        <h2>Privacy &amp; Communication</h2>
+      </div>
+      <div class="rules-body">
+        <div class="rule-item"><span class="rule-num">3.1</span><span class="rule-text">A driver's disciplinary standing will not be publicly disclosed by league admins.</span></div>
+        <div class="rule-item"><span class="rule-num">3.2</span><span class="rule-text">Admins do not want drivers publicly singled out or put on display for disciplinary matters.</span></div>
+        <div class="rule-item"><span class="rule-num">3.3</span><span class="rule-text">In some cases, incidents may be discussed publicly for educational purposes if no formal discipline beyond a conversation or coaching moment was issued.</span></div>
+        <div class="rule-item"><span class="rule-num">3.4</span><span class="rule-text">Admins reserve the right to adjust officiating standards and penalty systems. The default is to make major changes between seasons whenever possible.</span></div>
+      </div>
+    </div>
+
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">4</div>
+        <h2>Penalty Point Guidelines</h2>
+      </div>
+      <div class="rules-body">
+        <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Penalty points may be assigned when officials determine a driver's actions went beyond normal racing mistakes or created avoidable harm.</p>
+        <table class="penalty-table">
+          <thead>
+            <tr><th>Points</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="pts">0</td><td>Self-spin, self-inflicted off-track, harmless contact, or an incident that only harms your own race. A safe rejoin with no harm to others is also 0 points.</td></tr>
+            <tr><td class="pts">1</td><td>Minor contact, wheel banging, or an incident caused by over-aggression or lack of awareness where both drivers continue without significant damage or major time loss.</td></tr>
+            <tr><td class="pts">2</td><td>A spin, mistake, or loss of control that causes another driver to take significant avoiding action or lose measurable time, but does not seriously damage or end their race.</td></tr>
+            <tr><td class="pts">3</td><td>A mistake, bad rejoin, failure to hold brakes, or avoidable contact that causes significant harm to another driver's race, including damage, a spin with unavoidable contact, or sending another driver to pit lane.</td></tr>
+            <tr><td class="pts">4</td><td>A highly aggressive or careless action that causes a major crash and significantly harms the races of a few drivers.</td></tr>
+            <tr><td class="pts">5</td><td>Egregious over-aggression or conduct that causes a major incident affecting many drivers.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">5</div>
+        <h2>Season Consequences</h2>
+      </div>
+      <div class="rules-body">
+        <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">Penalty points accumulate over the course of a 12-race season.</p>
+        <div class="consequence-grid">
+          <div class="consequence-card">
+            <h4>F4</h4>
+            <div class="consequence-row"><span class="consequence-pts">5 pts</span><span class="consequence-text">Start next race from pit lane</span></div>
+            <div class="consequence-row"><span class="consequence-pts">9 pts</span><span class="consequence-text">Lose 10 championship points</span></div>
+            <div class="consequence-row"><span class="consequence-pts">12 pts</span><span class="consequence-text">Lose 25 championship points</span></div>
+            <div class="consequence-row"><span class="consequence-pts">14 pts</span><span class="consequence-text">Race suspension; further action possible including demotion to Rookie or removal</span></div>
+          </div>
+          <div class="consequence-card">
+            <h4>F3</h4>
+            <div class="consequence-row"><span class="consequence-pts">4 pts</span><span class="consequence-text">Pit start the next sprint</span></div>
+            <div class="consequence-row"><span class="consequence-pts">8 pts</span><span class="consequence-text">DNS the sprint and pit start the next feature</span></div>
+            <div class="consequence-row"><span class="consequence-pts">11 pts</span><span class="consequence-text">Lose 25 championship points</span></div>
+            <div class="consequence-row"><span class="consequence-pts">14 pts</span><span class="consequence-text">Race suspension; further action possible including demotion to F4 or removal</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">6</div>
+        <h2>Rookie League</h2>
+      </div>
+      <div class="rules-body">
+        <div class="rule-item"><span class="rule-num">6.1</span><span class="rule-text">Rookie league does not use the same season-long consequence table.</span></div>
+        <div class="rule-item"><span class="rule-num">6.2</span><span class="rule-text">Rookie is intended to be a place to learn, improve, and race without excessive fear of formal punishment.</span></div>
+        <div class="rule-item"><span class="rule-num">6.3</span><span class="rule-text">Damage is off and Rookie is not a points championship, so the emphasis is on coaching and development.</span></div>
+        <div class="rule-item"><span class="rule-num">6.4</span><span class="rule-text">That said, repeated over-driving, repeated avoidable incidents, or egregious behavior will still be addressed.</span></div>
+        <div class="rule-item"><span class="rule-num">6.5</span><span class="rule-text">Drivers may be coached, held back from promotion, or subject to further action if those issues are not corrected.</span></div>
+      </div>
+    </div>
+
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">7</div>
+        <h2>Final Notes</h2>
+      </div>
+      <div class="rules-body">
+        <div class="rule-item"><span class="rule-num">7.1</span><span class="rule-text">SRG wants fun, competitive racing in a respectful environment.</span></div>
+        <div class="rule-item"><span class="rule-num">7.2</span><span class="rule-text">Drivers are encouraged to race hard, but also to race with awareness, judgment, and respect for the people around them.</span></div>
+        <div class="rule-item"><span class="rule-num">7.3</span><span class="rule-text">This system is expected to evolve over time, and member feedback is welcome at the end of each season.</span></div>
+      </div>
+    </div>
+
+    <div class="page-nav">
+      <button class="btn-nav" onclick="goTo(1)">← Back</button>
+      <span class="page-counter">Step 3 of 5</span>
+      <button class="btn-nav primary" onclick="goTo(3)">Next: Rules →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE 4 — RULES
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-3">
+
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">1</div>
+        <h2>General Conduct</h2>
+      </div>
+      <div class="rules-body">
         <div class="rule-item"><span class="rule-num">1.1</span><span class="rule-text">Race with respect. This is for fun, not win-at-all-costs.</span></div>
         <div class="rule-item"><span class="rule-num">1.2</span><span class="rule-text">Avoid overly aggressive moves that rely on another driver taking evasive action to avoid contact.</span></div>
-        <div class="rule-item"><span class="rule-num">1.3</span><span class="rule-text">If a move forces a car that is alongside off track, the position should be given back or relinquished, depending on who gained the advantage.</span></div>
+        <div class="rule-item"><span class="rule-num">1.3</span><span class="rule-text">Serve slow-down penalties off the racing line. No blocking or defending.</span></div>
+        <div class="rule-item"><span class="rule-num">1.4</span><span class="rule-text">Follow iRacing track limits.</span></div>
       </div>
+    </div>
 
-      <div class="section-divider"></div>
-
-      <div class="sub-section">
-        <h3>2 · Passing</h3>
-
-        <div style="color:var(--gold);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin:8px 0 6px;font-weight:600;">Establishing Position</div>
-        <div class="rule-item"><span class="rule-num">2.1</span><span class="rule-text">Avoid contact. Both drivers share responsibility.</span></div>
-        <div class="rule-item"><span class="rule-num">2.2</span><span class="rule-text">Overlap (alongside) exists when a car's front nose is ahead of the front edge of the defending car's rear tire.</span></div>
-        <div class="rule-item"><span class="rule-num">2.3</span><span class="rule-text">If overlap exists, both drivers should leave racing room. Drivers should allow additional margin where possible to account for netcode and latency.</span></div>
-        <div class="rule-item"><span class="rule-num">2.4</span><span class="rule-text">No overlap by turn-in = the trailing car should yield.</span></div>
-
-        <div style="color:var(--gold);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin:14px 0 6px;font-weight:600;">Passing Driver Responsibilities</div>
-        <div class="rule-item"><span class="rule-num">2.5</span><span class="rule-text">The passing driver is responsible for attempting a safe pass.</span></div>
-        <div class="rule-item"><span class="rule-num">2.6</span><span class="rule-text">A passing attempt should not rely on the other driver taking evasive action to avoid contact.</span></div>
-        <div class="rule-item"><span class="rule-num">2.7</span><span class="rule-text">Do not leave the racing surface to complete a pass.</span></div>
-
-        <div style="color:var(--gold);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin:14px 0 6px;font-weight:600;">Defending Driver Responsibilities</div>
-        <div class="rule-item"><span class="rule-num">2.8</span><span class="rule-text">Drivers may choose a defensive line before the braking zone but should not make reactive moves in response to a passing attempt.</span></div>
-        <div class="rule-item"><span class="rule-num">2.9</span><span class="rule-text">Drivers may not move under braking and should maintain a predictable line into corner entry.</span></div>
-        <div class="rule-item"><span class="rule-num">2.10</span><span class="rule-text">Blue flags do not require an immediate yield, but drivers should not make a passing attempt unnecessarily difficult.</span></div>
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">2</div>
+        <h2>Passing</h2>
       </div>
+      <div class="rules-body">
+        <div class="sub-section">
+          <h3>Establishing Position</h3>
+          <div class="rule-item"><span class="rule-num">2.1</span><span class="rule-text">Avoid contact. Both drivers share responsibility.</span></div>
+          <div class="rule-item"><span class="rule-num">2.2</span><span class="rule-text">Overlap (alongside) exists when a car's front nose is ahead of the front edge of the defending car's rear tire.</span></div>
+          <div class="rule-item"><span class="rule-num">2.3</span><span class="rule-text">If overlap exists, both drivers should leave racing room. Allow additional margin where possible to account for netcode and latency.</span></div>
+          <div class="rule-item"><span class="rule-num">2.4</span><span class="rule-text">No overlap by turn-in = the trailing car should yield.</span></div>
+        </div>
+        <div class="section-divider"></div>
+        <div class="sub-section">
+          <h3>Passing Driver Responsibilities</h3>
+          <div class="rule-item"><span class="rule-num">2.5</span><span class="rule-text">The passing driver is responsible for attempting a safe pass.</span></div>
+          <div class="rule-item"><span class="rule-num">2.6</span><span class="rule-text">A passing attempt should not rely on the other driver taking evasive action to avoid contact.</span></div>
+          <div class="rule-item"><span class="rule-num">2.7</span><span class="rule-text">Do not leave the racing surface to complete a pass.</span></div>
+        </div>
+        <div class="section-divider"></div>
+        <div class="sub-section">
+          <h3>Defending Driver Responsibilities</h3>
+          <div class="rule-item"><span class="rule-num">2.8</span><span class="rule-text">Drivers may choose a defensive line before the braking zone but should not make reactive moves in response to a passing attempt. You are expected to maintain a predictable line into corner entry.</span></div>
+          <div class="rule-item"><span class="rule-num">2.9</span><span class="rule-text">Lapped drivers should not make a passing attempt unnecessarily difficult.</span></div>
+        </div>
+      </div>
+    </div>
 
-      <div class="section-divider"></div>
-
-      <div class="sub-section">
-        <h3>3 · Rejoining</h3>
+    <div class="rules-section">
+      <div class="rules-section-header">
+        <div class="section-number">3</div>
+        <h2>Rejoining</h2>
+      </div>
+      <div class="rules-body">
         <div class="rule-item"><span class="rule-num">3.1</span><span class="rule-text">Use a spotter or blind-spot tool when rejoining or exiting pits.</span></div>
-        <div class="rule-item"><span class="rule-num">3.2</span><span class="rule-text">Rejoin parallel to the track at a safe speed.</span></div>
+        <div class="rule-item"><span class="rule-num">3.2</span><span class="rule-text">Rejoin parallel to the track at a safe speed. Do not cross the racing line unsafely — reverse if needed.</span></div>
         <div class="rule-item"><span class="rule-num">3.3</span><span class="rule-text">Do not interfere with cars on track. Be predictable until up to pace.</span></div>
-        <div class="rule-item"><span class="rule-num">3.4</span><span class="rule-text">If you cause an incident while rejoining, it is your responsibility.</span></div>
-        <div class="rule-item"><span class="rule-num">3.5</span><span class="rule-text">Do not cross the racing line unsafely. Reverse if needed.</span></div>
-        <div class="rule-item"><span class="rule-num">3.6</span><span class="rule-text">If off track, yield to all cars before rejoining.</span></div>
-        <div class="rule-item"><span class="rule-num">3.7</span><span class="rule-text">If you lose control, hold the brakes and avoid unpredictable movement.</span></div>
-        <div class="rule-item"><span class="rule-num">3.8</span><span class="rule-text">Only rejoin once the car is under control.</span></div>
-        <div class="rule-item"><span class="rule-num">3.9</span><span class="rule-text">Serve slow-down penalties off the racing line. No blocking or defending.</span></div>
+        <div class="rule-item"><span class="rule-num">3.4</span><span class="rule-text">Yield to all cars before rejoining. If you cause an incident while rejoining, it is your responsibility.</span></div>
+        <div class="rule-item"><span class="rule-num">3.5</span><span class="rule-text">If you lose control, hold the brakes and avoid unpredictable movement.</span></div>
+        <div class="rule-item"><span class="rule-num">3.6</span><span class="rule-text">Only rejoin once the car is under control.</span></div>
       </div>
+    </div>
 
-      <div class="section-divider"></div>
-
-      <div class="sub-section">
-        <h3>4 · Track Limits</h3>
-        <div class="rule-item"><span class="rule-num">4.1</span><span class="rule-text">Follow iRacing track limits.</span></div>
-      </div>
-
+    <div class="page-nav">
+      <button class="btn-nav" onclick="goTo(2)">← Back</button>
+      <span class="page-counter">Step 4 of 5</span>
+      <button class="btn-nav primary" onclick="goTo(4)">Next: Acknowledge →</button>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════
-       ADD MORE RULE SECTIONS HERE
-       Copy the block above and change the section number
-  ═══════════════════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════════
+       PAGE 5 — ACKNOWLEDGMENT
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-4">
+    <div id="acknowledge-section">
+      <div class="ack-header">
+        <h2>✅ Driver Acknowledgment</h2>
+      </div>
+      <div class="ack-body">
 
-  <!-- ═══════════════════════════════════════════════════
-       ACKNOWLEDGMENT FORM
-  ═══════════════════════════════════════════════════ -->
-  <div id="acknowledge-section">
-    <div class="ack-header">
-      <h2>✅ Driver Acknowledgment</h2>
+        <div class="ack-notice">
+          By submitting this form you confirm that you have read and understood the SRG league rules and officiating procedures, and agree to race in accordance with them. Your name, email, iRacing ID, and the time of your submission will be recorded.
+        </div>
+
+        <div id="driver-card">
+          <div class="driver-avatar" id="driver-avatar-initial">?</div>
+          <div class="driver-card-info">
+            <div class="driver-card-name"  id="driver-card-name"></div>
+            <div class="driver-card-email" id="driver-card-email"></div>
+            <div class="driver-card-email" id="driver-card-irid" style="margin-top:2px;"></div>
+          </div>
+          <div class="driver-card-badge">Verified Driver</div>
+        </div>
+
+        <form id="ack-form">
+          <div class="form-row" id="manual-fields">
+            <div class="form-group">
+              <label class="field-label" for="driver-name">iRacing Name</label>
+              <input type="text" id="driver-name" placeholder="FirstName LastName" required />
+            </div>
+            <div class="form-group">
+              <label class="field-label" for="driver-email">Email Address</label>
+              <input type="email" id="driver-email" placeholder="you@example.com" required />
+            </div>
+          </div>
+          <div class="form-row" id="manual-irid-row">
+            <div class="form-group">
+              <label class="field-label" for="driver-irid">iRacing ID</label>
+              <input type="text" id="driver-irid" placeholder="e.g. 123456" />
+            </div>
+          </div>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="agree-check" required />
+            <span class="checkbox-label">
+              I have read and understood all SRG league rules and officiating procedures on this page and agree to abide by them.
+            </span>
+          </label>
+
+          <button type="submit" class="submit-btn" id="submit-btn" disabled>Submit Acknowledgment</button>
+          <div id="form-error">Something went wrong. Please try again or contact a league admin.</div>
+        </form>
+
+        <div id="success-message">
+          <div class="success-icon">🏁</div>
+          <h3>Acknowledgment Received</h3>
+          <p id="success-name-echo"></p>
+          <p style="margin-top:6px;">You're all set — see you on track.</p>
+        </div>
+
+      </div>
     </div>
-    <div class="ack-body">
 
-      <div class="ack-notice">
-        By submitting this form you confirm that you have read and understood the SRG league rules above,
-        and agree to race in accordance with them. Your name, email address, and the time of your
-        submission will be recorded.
-      </div>
-
-      <!-- Shown when info is pre-filled via URL params -->
-      <div id="driver-card">
-        <div class="driver-avatar" id="driver-avatar-initial">?</div>
-        <div class="driver-card-info">
-          <div class="driver-card-name" id="driver-card-name"></div>
-          <div class="driver-card-email" id="driver-card-email"></div>
-          <div class="driver-card-email" id="driver-card-irid" style="margin-top:2px;"></div>
-        </div>
-        <div class="driver-card-badge">Verified Driver</div>
-      </div>
-
-      <form id="ack-form">
-        <!-- Hidden when pre-filled via URL; shown for manual entry -->
-        <div class="form-row" id="manual-fields">
-          <div class="form-group">
-            <label class="field-label" for="driver-name">iRacing Name</label>
-            <input type="text" id="driver-name" name="name" placeholder="FirstName LastName" required />
-          </div>
-          <div class="form-group">
-            <label class="field-label" for="driver-email">Email Address</label>
-            <input type="email" id="driver-email" name="email" placeholder="you@example.com" required />
-          </div>
-        </div>
-        <div class="form-row" id="manual-irid-row">
-          <div class="form-group">
-            <label class="field-label" for="driver-irid">iRacing ID</label>
-            <input type="text" id="driver-irid" name="irid" placeholder="e.g. 123456" />
-          </div>
-        </div>
-
-        <label class="checkbox-row">
-          <input type="checkbox" id="agree-check" required />
-          <span class="checkbox-label">
-            I have read and understood all SRG league rules on this page and agree to abide by them.
-          </span>
-        </label>
-
-        <button type="submit" class="submit-btn" id="submit-btn" disabled>
-          Submit Acknowledgment
-        </button>
-
-        <div id="form-error">Something went wrong. Please try again or contact the league admin.</div>
-      </form>
-
-      <div id="success-message">
-        <div class="success-icon">🏁</div>
-        <h3>Acknowledgment Received</h3>
-        <p id="success-name-echo"></p>
-        <p style="margin-top:6px;">You're all set — see you on track.</p>
-      </div>
-
+    <div class="page-nav" id="ack-nav">
+      <button class="btn-nav" onclick="goTo(3)">← Back</button>
+      <span class="page-counter">Step 5 of 5</span>
     </div>
   </div>
-
-  <div id="scroll-warning">⬆ Scroll up and read all the rules before submitting</div>
 
 </div><!-- /wrapper -->
 
@@ -619,12 +1100,10 @@
 
 <script>
   // ─── CONFIG ────────────────────────────────────────────
-  // Replace this URL with your deployed Google Apps Script Web App URL
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzllPcTZw5LQKindlDnH3KJ-MgtDEbhBwdsE18oaKs12z_84kOdBbcsbc0NjPvj6Wmvlw/exec';
   // ───────────────────────────────────────────────────────
 
-  // ─── PRE-FILL FROM URL PARAMS ─────────────────────────
-  // Links look like: srg-rules.html?name=John+Doe&email=john@example.com&irid=123456
+  // ─── URL PARAMS ────────────────────────────────────────
   const params      = new URLSearchParams(window.location.search);
   const urlName     = params.get('name')  ? decodeURIComponent(params.get('name'))  : '';
   const urlEmail    = params.get('email') ? decodeURIComponent(params.get('email')) : '';
@@ -632,48 +1111,51 @@
   const isPreFilled = urlName && urlEmail;
 
   if (isPreFilled) {
-    // Fill hidden inputs
     document.getElementById('driver-name').value  = urlName;
     document.getElementById('driver-email').value = urlEmail;
     if (urlIrid) document.getElementById('driver-irid').value = urlIrid;
 
-    // Hide manual entry rows — info came from the link
-    document.getElementById('manual-fields').style.display    = 'none';
-    document.getElementById('manual-irid-row').style.display  = 'none';
+    document.getElementById('manual-fields').style.display   = 'none';
+    document.getElementById('manual-irid-row').style.display = 'none';
 
-    // Show the driver card
     const card = document.getElementById('driver-card');
     card.classList.add('visible');
     document.getElementById('driver-card-name').textContent  = urlName;
     document.getElementById('driver-card-email').textContent = urlEmail;
     if (urlIrid) document.getElementById('driver-card-irid').textContent = 'iRacing ID: ' + urlIrid;
-    document.getElementById('driver-avatar-initial').textContent =
-      urlName.trim().charAt(0).toUpperCase();
+    document.getElementById('driver-avatar-initial').textContent = urlName.trim().charAt(0).toUpperCase();
 
-    // Personalise the header subtitle
-    const subtitle = document.querySelector('header p.subtitle');
-    if (subtitle) subtitle.textContent =
-      'Hi ' + urlName.split(' ')[0] + '! Read all sections carefully, then check the box and submit below.';
+    document.getElementById('header-subtitle').textContent =
+      'Hi ' + urlName.split(' ')[0] + '! Read each section carefully, then acknowledge at the end.';
   }
   // ───────────────────────────────────────────────────────
 
-  // Read progress bar
-  const progressBar = document.getElementById('progress-bar');
-  window.addEventListener('scroll', () => {
-    const doc   = document.documentElement;
-    const pct   = doc.scrollTop / (doc.scrollHeight - doc.clientHeight) * 100;
-    progressBar.style.width = Math.min(pct, 100) + '%';
-  });
+  // ─── STEP NAVIGATION ───────────────────────────────────
+  let currentPage = 0;
+  const totalPages = 5;
 
-  // Enable submit only when checkbox is checked
+  function goTo(n) {
+    document.getElementById('page-' + currentPage).classList.remove('active');
+    currentPage = n;
+    document.getElementById('page-' + currentPage).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateStepNav();
+  }
+
+  function updateStepNav() {
+    document.querySelectorAll('.step-item').forEach((el, i) => {
+      el.classList.remove('active', 'done');
+      if (i < currentPage)  el.classList.add('done');
+      if (i === currentPage) el.classList.add('active');
+    });
+  }
+  // ───────────────────────────────────────────────────────
+
+  // ─── CHECKBOX / SUBMIT ─────────────────────────────────
   const checkbox  = document.getElementById('agree-check');
   const submitBtn = document.getElementById('submit-btn');
+  checkbox.addEventListener('change', () => { submitBtn.disabled = !checkbox.checked; });
 
-  checkbox.addEventListener('change', () => {
-    submitBtn.disabled = !checkbox.checked;
-  });
-
-  // Form submission → Google Apps Script
   document.getElementById('ack-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name  = document.getElementById('driver-name').value.trim();
@@ -685,26 +1167,22 @@
     submitBtn.textContent = 'Submitting…';
     error.style.display   = 'none';
 
-    const payload = { name, email, irid, acknowledged: true, timestamp: new Date().toISOString() };
-
     try {
       await fetch(APPS_SCRIPT_URL, {
         method:  'POST',
-        mode:    'no-cors',   // Apps Script doesn't need CORS preflight with no-cors
+        mode:    'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
+        body:    JSON.stringify({ name, email, irid, acknowledged: true, timestamp: new Date().toISOString() }),
       });
 
-      // Show success (no-cors means we can't read the response, assume success)
-      document.getElementById('ack-form').style.display = 'none';
-      const successEl = document.getElementById('success-message');
-      successEl.style.display = 'block';
-      document.getElementById('success-name-echo').textContent =
-        `${name} · ${email}`;
+      document.getElementById('ack-form').style.display    = 'none';
+      document.getElementById('ack-nav').style.display     = 'none';
+      document.getElementById('success-message').style.display = 'block';
+      document.getElementById('success-name-echo').textContent = name + ' · ' + email;
 
     } catch (err) {
-      error.style.display  = 'block';
-      submitBtn.disabled   = false;
+      error.style.display   = 'block';
+      submitBtn.disabled    = false;
       submitBtn.textContent = 'Submit Acknowledgment';
     }
   });

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SRG Admin — Send Driver Invite</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:      #e02020;
+      --red-dark: #a01010;
+      --gold:     #f0b429;
+      --bg:       #0c0c0e;
+      --surface:  #141418;
+      --surface2: #1c1c22;
+      --border:   #2a2a34;
+      --text:     #e8e8f0;
+      --muted:    #888898;
+      --green:    #22c55e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* ── Lock screen ── */
+    #lock-screen {
+      width: 100%;
+      max-width: 380px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 36px 32px;
+      text-align: center;
+    }
+
+    #lock-screen .lock-icon { font-size: 36px; margin-bottom: 12px; }
+    #lock-screen h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    #lock-screen p  { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+    #lock-screen input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 12px;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    #lock-screen input:focus { outline: none; border-color: var(--red); }
+
+    #lock-error {
+      font-size: 12px;
+      color: var(--red);
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    /* ── Main app ── */
+    #app {
+      display: none;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    /* ── Header ── */
+    .admin-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .admin-badge {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 12px;
+      border-radius: 2px;
+      margin-bottom: 10px;
+    }
+
+    .admin-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .admin-header p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .card-header {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 22px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .card-body { padding: 22px; }
+
+    /* ── Form ── */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .form-group:last-of-type { margin-bottom: 0; }
+
+    label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 14px;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(224,32,32,0.1);
+    }
+
+    input::placeholder { color: #44444e; }
+
+    /* ── Button ── */
+    .btn {
+      width: 100%;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 20px;
+    }
+    .btn:hover:not(:disabled) { background: #c01818; transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      margin-top: 8px;
+    }
+    .btn-secondary:hover:not(:disabled) { background: var(--border); color: var(--text); }
+
+    /* ── Status message ── */
+    #status {
+      display: none;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 13px;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+    #status.success {
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.25);
+      color: var(--green);
+    }
+    #status.error {
+      background: rgba(224,32,32,0.1);
+      border: 1px solid rgba(224,32,32,0.25);
+      color: #ff7070;
+    }
+
+    /* ── Sent log ── */
+    #sent-log {
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    .log-empty {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    .log-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+    }
+    .log-row:last-child { border-bottom: none; }
+
+    .log-avatar {
+      width: 30px; height: 30px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; color: #fff;
+      flex-shrink: 0;
+    }
+
+    .log-info { flex: 1; }
+    .log-name  { font-weight: 600; color: var(--text); }
+    .log-email { color: var(--muted); font-size: 11px; margin-top: 1px; }
+
+    .log-sent-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: rgba(34,197,94,0.1);
+      color: var(--green);
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 4px;
+      padding: 2px 7px;
+      white-space: nowrap;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: #333340;
+    }
+    footer a { color: #555560; text-decoration: none; }
+    footer a:hover { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <!-- ── Lock screen ── -->
+  <div id="lock-screen">
+    <div class="lock-icon">🔒</div>
+    <h2>Admin Access</h2>
+    <p>Enter the admin password to continue.</p>
+    <div id="lock-error">Incorrect password. Try again.</div>
+    <input type="password" id="password-input" placeholder="Password" autocomplete="off" />
+    <button class="btn" onclick="unlock()" style="margin-top:0;">Unlock</button>
+  </div>
+
+  <!-- ── Main app (shown after unlock) ── -->
+  <div id="app">
+
+    <div class="admin-header">
+      <div class="admin-badge">Admin Panel</div>
+      <h1>SRG Driver Invites</h1>
+      <p>Add a driver below to send them their personalized rules link.</p>
+    </div>
+
+    <!-- Send invite form -->
+    <div class="card">
+      <div class="card-header">Send New Invite</div>
+      <div class="card-body">
+        <div class="form-group">
+          <label for="d-name">iRacing Name</label>
+          <input type="text" id="d-name" placeholder="FirstName LastName" />
+        </div>
+        <div class="form-group">
+          <label for="d-email">Email Address</label>
+          <input type="email" id="d-email" placeholder="driver@example.com" />
+        </div>
+        <div class="form-group">
+          <label for="d-irid">iRacing ID</label>
+          <input type="text" id="d-irid" placeholder="e.g. 123456" />
+        </div>
+
+        <button class="btn" id="send-btn" onclick="sendInvite()">📨 Send Invite</button>
+        <div id="status"></div>
+      </div>
+    </div>
+
+    <!-- Sent this session -->
+    <div class="card">
+      <div class="card-header">Sent This Session</div>
+      <div class="card-body" style="padding:14px 22px;">
+        <div id="sent-log">
+          <div class="log-empty">No invites sent yet this session.</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <a href="srg-rules.html" target="_blank">View Rules Page</a>
+    </footer>
+
+  </div>
+
+<script>
+  // ─── CONFIG — change these to match your setup ────────
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRa-coyv9NkNeJQfY56IX1kmrb0xSq--mXgO153PPFDZjEj2yp1yi94O6EHqZ8vHC3dw/exec';
+  const ADMIN_PASSWORD  = 'srg-admin';   // ← Change this to whatever you want
+  // ──────────────────────────────────────────────────────
+
+  const sentList = [];
+
+  // ── Unlock ──────────────────────────────────────────
+  function unlock() {
+    const val = document.getElementById('password-input').value;
+    if (val === ADMIN_PASSWORD) {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    } else {
+      document.getElementById('lock-error').style.display = 'block';
+      document.getElementById('password-input').value = '';
+      document.getElementById('password-input').focus();
+    }
+  }
+
+  document.getElementById('password-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') unlock();
+  });
+
+  // ── Send invite ──────────────────────────────────────
+  async function sendInvite() {
+    const name  = document.getElementById('d-name').value.trim();
+    const email = document.getElementById('d-email').value.trim();
+    const irid  = document.getElementById('d-irid').value.trim();
+    const status = document.getElementById('status');
+    const btn    = document.getElementById('send-btn');
+
+    if (!name || !email) {
+      showStatus('error', 'Name and email are required.');
+      return;
+    }
+
+    btn.disabled     = true;
+    btn.textContent  = 'Sending…';
+    status.style.display = 'none';
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method:  'POST',
+        mode:    'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          action:    'addDriver',
+          adminKey:  ADMIN_PASSWORD,
+          name, email, irid
+        }),
+      });
+
+      // no-cors means we can't read the response — assume success
+      showStatus('success', `✓ Invite sent to ${email}`);
+      addToLog(name, email);
+      clearForm();
+
+    } catch (err) {
+      showStatus('error', 'Something went wrong. Check your connection and try again.');
+    }
+
+    btn.disabled    = false;
+    btn.textContent = '📨 Send Invite';
+  }
+
+  function showStatus(type, msg) {
+    const el = document.getElementById('status');
+    el.className     = type;
+    el.textContent   = msg;
+    el.style.display = 'block';
+  }
+
+  function clearForm() {
+    document.getElementById('d-name').value  = '';
+    document.getElementById('d-email').value = '';
+    document.getElementById('d-irid').value  = '';
+    document.getElementById('d-name').focus();
+  }
+
+  function addToLog(name, email) {
+    sentList.unshift({ name, email });
+    const log = document.getElementById('sent-log');
+    log.innerHTML = sentList.map(d => `
+      <div class="log-row">
+        <div class="log-avatar">${d.name.charAt(0).toUpperCase()}</div>
+        <div class="log-info">
+          <div class="log-name">${d.name}</div>
+          <div class="log-email">${d.email}</div>
+        </div>
+        <div class="log-sent-badge">Sent</div>
+      </div>
+    `).join('');
+  }
+</script>
+</body>
+</html>

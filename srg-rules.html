@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SRG League Rules &amp; Acknowledgment</title>
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:      #e02020;
+      --red-dark: #a01010;
+      --gold:     #f0b429;
+      --bg:       #0c0c0e;
+      --surface:  #141418;
+      --surface2: #1c1c22;
+      --border:   #2a2a34;
+      --text:     #e8e8f0;
+      --muted:    #888898;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── Checkered header strip ── */
+    .check-strip {
+      height: 8px;
+      background-image: repeating-linear-gradient(
+        90deg,
+        #fff 0px, #fff 12px,
+        #000 12px, #000 24px
+      );
+      opacity: 0.12;
+    }
+
+    /* ── Hero header ── */
+    header {
+      background: linear-gradient(160deg, #161620 0%, #0c0c0e 60%);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 24px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(224,32,32,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .league-badge {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 2px;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      color: #fff;
+    }
+
+    header h1 span { color: var(--red); }
+
+    header p.subtitle {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── Layout ── */
+    .wrapper {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* ── Read progress bar ── */
+    #progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: var(--red);
+      z-index: 999;
+      transition: width 0.15s;
+    }
+
+    /* ── Section cards ── */
+    .rules-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 28px;
+      overflow: hidden;
+    }
+
+    .rules-section-header {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-number {
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .rules-section-header h2 {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .rules-body { padding: 20px 22px; }
+
+    /* ── Sub-sections ── */
+    .sub-section {
+      margin-bottom: 20px;
+    }
+    .sub-section:last-child { margin-bottom: 0; }
+
+    .sub-section h3 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Rule items ── */
+    .rule-item {
+      display: flex;
+      gap: 12px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .rule-item:last-child { border-bottom: none; }
+
+    .rule-num {
+      color: var(--red);
+      font-weight: 700;
+      font-size: 13px;
+      min-width: 36px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .rule-text { color: #c8c8d8; font-size: 14px; }
+
+    /* ── Divider ── */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0;
+    }
+
+    /* ── Acknowledgment card ── */
+    #acknowledge-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 40px;
+      overflow: hidden;
+    }
+
+    .ack-header {
+      background: linear-gradient(90deg, var(--red-dark), #1e1e28);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ack-header h2 {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .ack-body { padding: 28px 24px; }
+
+    /* ── Pre-filled driver card ── */
+    #driver-card {
+      display: none;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: none;
+      align-items: center;
+      gap: 14px;
+    }
+    #driver-card.visible { display: flex; }
+
+    .driver-avatar {
+      width: 40px; height: 40px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .driver-card-info { flex: 1; }
+    .driver-card-name { font-weight: 700; font-size: 15px; color: #fff; }
+    .driver-card-email { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .driver-card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: rgba(240,180,41,0.12);
+      color: var(--gold);
+      border: 1px solid rgba(240,180,41,0.25);
+      border-radius: 4px;
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+
+    .ack-notice {
+      background: rgba(224,32,32,0.08);
+      border: 1px solid rgba(224,32,32,0.2);
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #c8c8d8;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* ── Form fields ── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 520px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+    label.field-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 14px;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      outline: none;
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(224,32,32,0.12);
+    }
+
+    input::placeholder { color: #555560; }
+
+    /* ── Checkbox ── */
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin: 20px 0 24px;
+      cursor: pointer;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      appearance: none;
+      width: 20px; height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg);
+      flex-shrink: 0;
+      margin-top: 1px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      position: relative;
+    }
+
+    .checkbox-row input[type="checkbox"]:checked {
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .checkbox-row input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px; top: 1px;
+      width: 6px; height: 10px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(40deg);
+    }
+
+    .checkbox-label {
+      font-size: 14px;
+      color: #c8c8d8;
+      line-height: 1.5;
+      user-select: none;
+    }
+
+    /* ── Submit button ── */
+    .submit-btn {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 13px 32px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s, transform 0.1s;
+      width: 100%;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: #c01818;
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:active:not(:disabled) { transform: translateY(0); }
+
+    .submit-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    /* ── Success state ── */
+    #success-message {
+      display: none;
+      text-align: center;
+      padding: 32px 24px;
+    }
+
+    .success-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    #success-message h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    #success-message p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ── Error message ── */
+    #form-error {
+      display: none;
+      background: rgba(224,32,32,0.1);
+      border: 1px solid rgba(224,32,32,0.3);
+      border-radius: 6px;
+      color: #ff7070;
+      font-size: 13px;
+      padding: 10px 14px;
+      margin-top: 12px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Scroll-lock warning ── */
+    #scroll-warning {
+      position: sticky;
+      bottom: 16px;
+      margin: 16px 0 0;
+      background: var(--surface2);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--gold);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    #scroll-warning.visible { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div class="check-strip"></div>
+
+<header>
+  <div class="league-badge">Official League Document</div>
+  <h1><span>SRG</span> League Rules</h1>
+  <p class="subtitle">Read all sections carefully before acknowledging. Your submission is logged with your name, email, and timestamp.</p>
+</header>
+
+<div class="wrapper">
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 1 — GENERAL CONDUCT
+  ═══════════════════════════════════════════════════ -->
+  <div class="rules-section">
+    <div class="rules-section-header">
+      <div class="section-number">1</div>
+      <h2>🏁 SRG On-Track Conduct</h2>
+    </div>
+    <div class="rules-body">
+
+      <p style="color:var(--muted);font-size:13px;margin-bottom:18px;">
+        These guidelines promote clean, respectful racing while preserving the competitive and fun nature of league racing.
+        Not every incident will result in a penalty, but all drivers are expected to race with awareness and consideration for others.
+      </p>
+
+      <div class="sub-section">
+        <h3>1 · General Conduct</h3>
+        <div class="rule-item"><span class="rule-num">1.1</span><span class="rule-text">Race with respect. This is for fun, not win-at-all-costs.</span></div>
+        <div class="rule-item"><span class="rule-num">1.2</span><span class="rule-text">Avoid overly aggressive moves that rely on another driver taking evasive action to avoid contact.</span></div>
+        <div class="rule-item"><span class="rule-num">1.3</span><span class="rule-text">If a move forces a car that is alongside off track, the position should be given back or relinquished, depending on who gained the advantage.</span></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="sub-section">
+        <h3>2 · Passing</h3>
+
+        <div style="color:var(--gold);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin:8px 0 6px;font-weight:600;">Establishing Position</div>
+        <div class="rule-item"><span class="rule-num">2.1</span><span class="rule-text">Avoid contact. Both drivers share responsibility.</span></div>
+        <div class="rule-item"><span class="rule-num">2.2</span><span class="rule-text">Overlap (alongside) exists when a car's front nose is ahead of the front edge of the defending car's rear tire.</span></div>
+        <div class="rule-item"><span class="rule-num">2.3</span><span class="rule-text">If overlap exists, both drivers should leave racing room. Drivers should allow additional margin where possible to account for netcode and latency.</span></div>
+        <div class="rule-item"><span class="rule-num">2.4</span><span class="rule-text">No overlap by turn-in = the trailing car should yield.</span></div>
+
+        <div style="color:var(--gold);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin:14px 0 6px;font-weight:600;">Passing Driver Responsibilities</div>
+        <div class="rule-item"><span class="rule-num">2.5</span><span class="rule-text">The passing driver is responsible for attempting a safe pass.</span></div>
+        <div class="rule-item"><span class="rule-num">2.6</span><span class="rule-text">A passing attempt should not rely on the other driver taking evasive action to avoid contact.</span></div>
+        <div class="rule-item"><span class="rule-num">2.7</span><span class="rule-text">Do not leave the racing surface to complete a pass.</span></div>
+
+        <div style="color:var(--gold);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin:14px 0 6px;font-weight:600;">Defending Driver Responsibilities</div>
+        <div class="rule-item"><span class="rule-num">2.8</span><span class="rule-text">Drivers may choose a defensive line before the braking zone but should not make reactive moves in response to a passing attempt.</span></div>
+        <div class="rule-item"><span class="rule-num">2.9</span><span class="rule-text">Drivers may not move under braking and should maintain a predictable line into corner entry.</span></div>
+        <div class="rule-item"><span class="rule-num">2.10</span><span class="rule-text">Blue flags do not require an immediate yield, but drivers should not make a passing attempt unnecessarily difficult.</span></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="sub-section">
+        <h3>3 · Rejoining</h3>
+        <div class="rule-item"><span class="rule-num">3.1</span><span class="rule-text">Use a spotter or blind-spot tool when rejoining or exiting pits.</span></div>
+        <div class="rule-item"><span class="rule-num">3.2</span><span class="rule-text">Rejoin parallel to the track at a safe speed.</span></div>
+        <div class="rule-item"><span class="rule-num">3.3</span><span class="rule-text">Do not interfere with cars on track. Be predictable until up to pace.</span></div>
+        <div class="rule-item"><span class="rule-num">3.4</span><span class="rule-text">If you cause an incident while rejoining, it is your responsibility.</span></div>
+        <div class="rule-item"><span class="rule-num">3.5</span><span class="rule-text">Do not cross the racing line unsafely. Reverse if needed.</span></div>
+        <div class="rule-item"><span class="rule-num">3.6</span><span class="rule-text">If off track, yield to all cars before rejoining.</span></div>
+        <div class="rule-item"><span class="rule-num">3.7</span><span class="rule-text">If you lose control, hold the brakes and avoid unpredictable movement.</span></div>
+        <div class="rule-item"><span class="rule-num">3.8</span><span class="rule-text">Only rejoin once the car is under control.</span></div>
+        <div class="rule-item"><span class="rule-num">3.9</span><span class="rule-text">Serve slow-down penalties off the racing line. No blocking or defending.</span></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="sub-section">
+        <h3>4 · Track Limits</h3>
+        <div class="rule-item"><span class="rule-num">4.1</span><span class="rule-text">Follow iRacing track limits.</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       ADD MORE RULE SECTIONS HERE
+       Copy the block above and change the section number
+  ═══════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════
+       ACKNOWLEDGMENT FORM
+  ═══════════════════════════════════════════════════ -->
+  <div id="acknowledge-section">
+    <div class="ack-header">
+      <h2>✅ Driver Acknowledgment</h2>
+    </div>
+    <div class="ack-body">
+
+      <div class="ack-notice">
+        By submitting this form you confirm that you have read and understood the SRG league rules above,
+        and agree to race in accordance with them. Your name, email address, and the time of your
+        submission will be recorded.
+      </div>
+
+      <!-- Shown when info is pre-filled via URL params -->
+      <div id="driver-card">
+        <div class="driver-avatar" id="driver-avatar-initial">?</div>
+        <div class="driver-card-info">
+          <div class="driver-card-name" id="driver-card-name"></div>
+          <div class="driver-card-email" id="driver-card-email"></div>
+          <div class="driver-card-email" id="driver-card-irid" style="margin-top:2px;"></div>
+        </div>
+        <div class="driver-card-badge">Verified Driver</div>
+      </div>
+
+      <form id="ack-form">
+        <!-- Hidden when pre-filled via URL; shown for manual entry -->
+        <div class="form-row" id="manual-fields">
+          <div class="form-group">
+            <label class="field-label" for="driver-name">iRacing Name</label>
+            <input type="text" id="driver-name" name="name" placeholder="FirstName LastName" required />
+          </div>
+          <div class="form-group">
+            <label class="field-label" for="driver-email">Email Address</label>
+            <input type="email" id="driver-email" name="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="form-row" id="manual-irid-row">
+          <div class="form-group">
+            <label class="field-label" for="driver-irid">iRacing ID</label>
+            <input type="text" id="driver-irid" name="irid" placeholder="e.g. 123456" />
+          </div>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="agree-check" required />
+          <span class="checkbox-label">
+            I have read and understood all SRG league rules on this page and agree to abide by them.
+          </span>
+        </label>
+
+        <button type="submit" class="submit-btn" id="submit-btn" disabled>
+          Submit Acknowledgment
+        </button>
+
+        <div id="form-error">Something went wrong. Please try again or contact the league admin.</div>
+      </form>
+
+      <div id="success-message">
+        <div class="success-icon">🏁</div>
+        <h3>Acknowledgment Received</h3>
+        <p id="success-name-echo"></p>
+        <p style="margin-top:6px;">You're all set — see you on track.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="scroll-warning">⬆ Scroll up and read all the rules before submitting</div>
+
+</div><!-- /wrapper -->
+
+<footer>
+  SRG League &nbsp;·&nbsp; Rules effective 2026 &nbsp;·&nbsp; For questions contact a league admin
+</footer>
+
+<script>
+  // ─── CONFIG ────────────────────────────────────────────
+  // Replace this URL with your deployed Google Apps Script Web App URL
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRa-coyv9NkNeJQfY56IX1kmrb0xSq--mXgO153PPFDZjEj2yp1yi94O6EHqZ8vHC3dw/exec';
+  // ───────────────────────────────────────────────────────
+
+  // ─── PRE-FILL FROM URL PARAMS ─────────────────────────
+  // Links look like: srg-rules.html?name=John+Doe&email=john@example.com&irid=123456
+  const params      = new URLSearchParams(window.location.search);
+  const urlName     = params.get('name')  ? decodeURIComponent(params.get('name'))  : '';
+  const urlEmail    = params.get('email') ? decodeURIComponent(params.get('email')) : '';
+  const urlIrid     = params.get('irid')  ? decodeURIComponent(params.get('irid'))  : '';
+  const isPreFilled = urlName && urlEmail;
+
+  if (isPreFilled) {
+    // Fill hidden inputs
+    document.getElementById('driver-name').value  = urlName;
+    document.getElementById('driver-email').value = urlEmail;
+    if (urlIrid) document.getElementById('driver-irid').value = urlIrid;
+
+    // Hide manual entry rows — info came from the link
+    document.getElementById('manual-fields').style.display    = 'none';
+    document.getElementById('manual-irid-row').style.display  = 'none';
+
+    // Show the driver card
+    const card = document.getElementById('driver-card');
+    card.classList.add('visible');
+    document.getElementById('driver-card-name').textContent  = urlName;
+    document.getElementById('driver-card-email').textContent = urlEmail;
+    if (urlIrid) document.getElementById('driver-card-irid').textContent = 'iRacing ID: ' + urlIrid;
+    document.getElementById('driver-avatar-initial').textContent =
+      urlName.trim().charAt(0).toUpperCase();
+
+    // Personalise the header subtitle
+    const subtitle = document.querySelector('header p.subtitle');
+    if (subtitle) subtitle.textContent =
+      'Hi ' + urlName.split(' ')[0] + '! Read all sections carefully, then check the box and submit below.';
+  }
+  // ───────────────────────────────────────────────────────
+
+  // Read progress bar
+  const progressBar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const doc   = document.documentElement;
+    const pct   = doc.scrollTop / (doc.scrollHeight - doc.clientHeight) * 100;
+    progressBar.style.width = Math.min(pct, 100) + '%';
+  });
+
+  // Enable submit only when checkbox is checked
+  const checkbox  = document.getElementById('agree-check');
+  const submitBtn = document.getElementById('submit-btn');
+
+  checkbox.addEventListener('change', () => {
+    submitBtn.disabled = !checkbox.checked;
+  });
+
+  // Form submission → Google Apps Script
+  document.getElementById('ack-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name  = document.getElementById('driver-name').value.trim();
+    const email = document.getElementById('driver-email').value.trim();
+    const irid  = document.getElementById('driver-irid').value.trim();
+    const error = document.getElementById('form-error');
+
+    submitBtn.disabled    = true;
+    submitBtn.textContent = 'Submitting…';
+    error.style.display   = 'none';
+
+    const payload = { name, email, irid, acknowledged: true, timestamp: new Date().toISOString() };
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method:  'POST',
+        mode:    'no-cors',   // Apps Script doesn't need CORS preflight with no-cors
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload),
+      });
+
+      // Show success (no-cors means we can't read the response, assume success)
+      document.getElementById('ack-form').style.display = 'none';
+      const successEl = document.getElementById('success-message');
+      successEl.style.display = 'block';
+      document.getElementById('success-name-echo').textContent =
+        `${name} · ${email}`;
+
+    } catch (err) {
+      error.style.display  = 'block';
+      submitBtn.disabled   = false;
+      submitBtn.textContent = 'Submit Acknowledgment';
+    }
+  });
+</script>
+</body>
+</html>
